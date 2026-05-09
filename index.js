@@ -38,17 +38,24 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
+app.get("/", (req, res) => {
+  res.send("Server is running");
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/items', itemRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'CloudClip API is running' });
 });
+app.get('/api/check', (req, res) => {
+  res.json({ status: 'ok', message: 'Everything is fine..👍' });
+});
 
 app.use(errorHandler);
 
 // Listen on all interfaces so LAN devices can reach the server
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT,  () => {
   console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
   console.log(`   Local:   http://localhost:${PORT}`);
   console.log(`   Network: find your LAN IP with ipconfig/ifconfig`);
