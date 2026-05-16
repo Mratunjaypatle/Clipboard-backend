@@ -56,6 +56,7 @@ app.use(errorHandler);
 
 // Listen on all interfaces so LAN devices can reach the server
 app.listen(PORT,  () => {
+  console.log("congratulations server is working.")
   console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
   console.log(`   Local:   http://localhost:${PORT}`);
   console.log(`   Network: find your LAN IP with ipconfig/ifconfig`);
