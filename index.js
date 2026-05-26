@@ -77,6 +77,13 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+app.get("" , (req,res) =>
+{
+    res.json({
+      message : "Server is running 💕🍂🙌"
+    })
+})
+
 // ── Error handler ─────────────────────────────────────────────────────────────
 app.use(errorHandler);
 
