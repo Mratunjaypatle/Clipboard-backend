@@ -4,10 +4,14 @@ const createTransporter = () => {
   return nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: process.env.SMTP_SECURE === 'true', // true for 465, false for 587
+    secure: process.env.SMTP_SECURE === 'true',
+    family: 4, // Force IPv4 — Render free tier blocks IPv6 outbound connections
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
+    },
+    tls: {
+      rejectUnauthorized: false, // Helps on some restricted hosting environments
     },
   });
 };
@@ -32,20 +36,18 @@ const sendOtpEmail = async ({ to, name, otp }) => {
     <tr>
       <td align="center">
         <table width="100%" style="max-width:480px;background:#141416;border:1px solid #2a2a2f;border-radius:16px;overflow:hidden;">
-          <!-- Header -->
           <tr>
             <td style="background:#7c6af7;padding:24px 32px;">
               <table cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="background:rgba(255,255,255,0.2);border-radius:8px;padding:8px 12px;font-size:20px;line-height:1;">📋</td>
                   <td style="padding-left:12px;">
-                    <span style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:-0.02em;">CloudClip</span>
+                    <span style="font-family:sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:-0.02em;">CloudClip</span>
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
-          <!-- Body -->
           <tr>
             <td style="padding:32px;">
               <p style="margin:0 0 8px;font-size:13px;color:#7a7a88;letter-spacing:0.06em;text-transform:uppercase;">Email Verification</p>
@@ -53,17 +55,15 @@ const sendOtpEmail = async ({ to, name, otp }) => {
               <p style="margin:0 0 28px;font-size:14px;color:#7a7a88;line-height:1.6;">
                 Use the code below to complete your CloudClip registration. It expires in <strong style="color:#e8e8ee;">10 minutes</strong>.
               </p>
-              <!-- OTP Box -->
               <div style="background:#1c1c1f;border:1px solid #2a2a2f;border-radius:12px;padding:24px;text-align:center;margin-bottom:28px;">
                 <div style="font-size:11px;color:#4a4a56;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">Your verification code</div>
                 <div style="font-size:42px;font-weight:700;letter-spacing:0.18em;color:#a89cf9;font-family:'Courier New',monospace;">${otp}</div>
               </div>
               <p style="margin:0;font-size:12px;color:#4a4a56;line-height:1.6;">
-                If you did not create a CloudClip account, you can safely ignore this email. Someone may have typed your address by mistake.
+                If you did not create a CloudClip account, you can safely ignore this email.
               </p>
             </td>
           </tr>
-          <!-- Footer -->
           <tr>
             <td style="padding:16px 32px 24px;border-top:1px solid #2a2a2f;">
               <p style="margin:0;font-size:11px;color:#4a4a56;text-align:center;">
