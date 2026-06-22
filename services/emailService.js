@@ -2,16 +2,13 @@ const nodemailer = require('nodemailer');
 
 const createTransporter = () => {
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: process.env.SMTP_SECURE === 'true',
-    family: 4, // Force IPv4 — Render free tier blocks IPv6 outbound connections
+    host: 'smtp.gmail.com',
+    port: 465,        // Port 465 (SSL) works on Render — port 587 is blocked
+    secure: true,     // Must be true for port 465
+    family: 4,        // Force IPv4 — Render blocks IPv6
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
-    },
-    tls: {
-      rejectUnauthorized: false, // Helps on some restricted hosting environments
     },
   });
 };
@@ -42,7 +39,7 @@ const sendOtpEmail = async ({ to, name, otp }) => {
                 <tr>
                   <td style="background:rgba(255,255,255,0.2);border-radius:8px;padding:8px 12px;font-size:20px;line-height:1;">📋</td>
                   <td style="padding-left:12px;">
-                    <span style="font-family:sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:-0.02em;">CloudClip</span>
+                    <span style="font-family:sans-serif;font-size:20px;font-weight:800;color:#fff;">CloudClip</span>
                   </td>
                 </tr>
               </table>
@@ -53,7 +50,8 @@ const sendOtpEmail = async ({ to, name, otp }) => {
               <p style="margin:0 0 8px;font-size:13px;color:#7a7a88;letter-spacing:0.06em;text-transform:uppercase;">Email Verification</p>
               <h2 style="margin:0 0 16px;font-size:22px;font-weight:700;color:#e8e8ee;">Hi ${name}, verify your email</h2>
               <p style="margin:0 0 28px;font-size:14px;color:#7a7a88;line-height:1.6;">
-                Use the code below to complete your CloudClip registration. It expires in <strong style="color:#e8e8ee;">10 minutes</strong>.
+                Use the code below to complete your CloudClip registration.
+                It expires in <strong style="color:#e8e8ee;">10 minutes</strong>.
               </p>
               <div style="background:#1c1c1f;border:1px solid #2a2a2f;border-radius:12px;padding:24px;text-align:center;margin-bottom:28px;">
                 <div style="font-size:11px;color:#4a4a56;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">Your verification code</div>
